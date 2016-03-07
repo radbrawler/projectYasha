@@ -1,3 +1,15 @@
 # ignore idea files
 .idea/
 *.pyc
+
+#  ignore these directories
+# virtualenv directories
+bin
+lib
+include
+local
+
+# ignore these temporary files
+base.html
+register.py
+temp.py
