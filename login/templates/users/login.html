@@ -11,7 +11,7 @@
     <br><br><br><br>
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="col-md-1"></div>
+            <div class="col-md-4"></div>
             <div class="col-md-4">
                 <h4>Login</h4>
                 Login here to continue
@@ -37,34 +37,30 @@
             <style type="text/css">
                 #your-color{border-left: 1px solid black;}
             </style>
-            <div class="col-md-1"></div>
-            <div class="col-md-1" id="your_col">
-                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            </div>
-            <div class="col-md-4">
-                <h4>Noobs Register here</h4>
-                Register to embark on new journey
-                <hr>
-                <span id="newUserErrors" style="background-color:#a00;"></span>
-                <br><br>
-                <form role="form" id="addUserForm" action = "javascript:addUser()">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="inputUsername">Username</label>
-                        <input required type="text" class="form-control" id="newUser" placeholder="Noobs Please register here" name="user_name">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail">Email address</label>
-                        <input required type="email" class="form-control" id="newUserEmail" placeholder="Enter email id" name="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPassword">Password</label>
-                        <input required type="password" class="form-control" id="newUserPassword" placeholder="Password" name="pass_word">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Register</button>
-                </form>
-                <hr></hr>
-            </div>
+            <!--<div class="col-md-4">-->
+                <!--<h4>Noobs Register here</h4>-->
+                <!--Register to embark on new journey-->
+                <!--<hr>-->
+                <!--<span id="newUserErrors" style="background-color:#a00;"></span>-->
+                <!--<br><br>-->
+                <!--<form role="form" id="addUserForm" action = "javascript:addUser()">-->
+                    <!--{% csrf_token %}-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="inputUsername">Username</label>-->
+                        <!--<input required type="text" class="form-control" id="newUser" placeholder="Noobs Please register here" name="user_name">-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="inputEmail">Email address</label>-->
+                        <!--<input required type="email" class="form-control" id="newUserEmail" placeholder="Enter email id" name="email">-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="inputPassword">Password</label>-->
+                        <!--<input required type="password" class="form-control" id="newUserPassword" placeholder="Password" name="pass_word">-->
+                    <!--</div>-->
+                    <!--<button type="submit" class="btn btn-primary">Register</button>-->
+                <!--</form>-->
+                <!--<hr></hr>-->
+            <!--</div>-->
         </div>
     </div>
 </body>
@@ -90,6 +86,7 @@
       }
       if(done){
         var loginForm = $("#loginForm").serialize();
+        console.log(loginForm);
         $.ajax({
           type:"POST",
           url:"/login/login",
@@ -97,12 +94,13 @@
           data: loginForm,
           success:function(data){
             if(data.errors){
-              error = "Are you drunk or not registered?";
+                console.log(" here in if");
+              error = "This username and password is not registered?";
               $("#errors").html(error).addClass("badge");
               done=false;
             }else{
-                console.log("here");
-                window.location.href = "/home"
+                console.log("here in else");
+                window.location.href = "/login/login"
             }
           }
         });

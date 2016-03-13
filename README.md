@@ -1,8 +1,6 @@
 # README #
 
-This app is course project under Software Engineering Course.
-
-Inspired by our love for DOTA2. A small tribute.
+This app is course project of CS223-Software Engineering Course.
 
 ### Summary ###
 
@@ -12,7 +10,8 @@ Inspired by our love for DOTA2. A small tribute.
 
 ### Contributors ###
 
-* Anmol
-* Narendar Kumar
-* Indraneel Pise
-* Parag Dale
+* [Anmol]
+* [Narendar Kumar]
+* [Indraneel Pise]
+* [Parag Dale]
+

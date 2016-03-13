@@ -16,7 +16,7 @@
                 <!--<li><a href="#">Inicio</a></li>-->
                 <!--<li class="active"><a href="http://bootsnipp.com/snippets/featured/nav-account-manager" target="_blank">Inspirado en este ejemplo</a></li>-->
                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">DropDown
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Notification
                     <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="col-lg-8">
                                         <p class="text-left"><strong>{{user.name}}</strong></p>
-                                        <p class="text-left small">correoElectronico@email.com</p>
+                                        <p class="text-left small">{{user.email }}</p>
                                         <p class="text-left">
                                             <a href="#" class="btn btn-primary btn-block btn-sm">Actualizar Datos</a>
                                         </p>
@@ -51,17 +51,6 @@
                             </div>
                         </li>
                         <li class="divider"></li>
-                        <li>
-                            <div class="navbar-login navbar-login-session">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <p>
-                                            <a href="#" class="btn btn-danger btn-block">Cerrar Sesion</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
                     </ul>
                 </li>
             </ul>
@@ -73,25 +62,62 @@
         <div class="row-fluid">
             <div class="col-md-4"></div>
             <div class="col-md-4">
-                <form role="form">
-                <div class="form-group">
-                    <label for="obj">Object</label>
-                    <select class="form-control" id="obj">
-                        {{ for i in range(len(obj)) }}
-                        <option>{{obj[i]}}</option>
-                        {{ endfor }}
 
-                </div>
-                <div class="form-group">
-                    <label for="qty">Quantity</label>
-                    <input class="form-control" id="qty">
-                </div>
-                <button type="submit" class="btn btn-default">Submit</button>
+                <form role="form" id="req_form" action="javascript:request()">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="object">Object</label>
+                        <select class="form-control" id="object" name="object">
+                            {% for i in obj%}
+                            <option>{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="qty">Quantity</label>
+                        <input class="form-control" id="qty" name="qty">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
             <div class="col-md-4">
         </div>
     </div>
-
+</div>
 
 </body>
+
+<script type="text/javascript">
+    function request(){
+        var object =  document.getElementById("object").value;
+        console.log(object);
+        var quantity = document.getElementById("qty").value;
+        console.log(quantity);
+        var done = true;
+
+        if (done){
+            var req_form = $("#req_form").serialize();
+            console.log("here are we");
+            console.log(req_form);
+            $.ajax({
+                type:"POST",
+                url:"/login/val_req",
+                dataType:"json",
+                data: req_form,
+                success:function(data){
+                    if(data.errors){
+                        <!--error = "Unknown Error Occurred";-->
+                        alert(data.errors);
+                        <!--$("#errors").html(error).addClass("badge");-->
+                        done=false;
+                        window.location.href = "/login/index";
+                    }else{
+                        alert("in else");
+                        console.log("here");
+                        window.location.href = "/login/index";
+                    }
+                }
+            });
+        }
+    }
+</script>

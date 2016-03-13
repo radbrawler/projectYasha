@@ -88,17 +88,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         return fullname
 
 
-class Student(User):
-    year = models.CharField(max_length=2, choices=YEAR)
-    department = models.CharField(max_length=2, choices=DEPARTMENT)
-    roll_no = models.CharField(max_length=12, blank=False)
-    mentor = models.CharField
+class Admin(User):
+    is_superuser = True
 
     def __str__(self):
-        return str(self.name + self.year + self.department)
+        return str(self.username + self.email)
 
     def get_short_name(self):
-        return self.name
+        return self.username
 
     def get_full_name(self):
         fullname = self.username+' '+self.email
@@ -108,9 +105,27 @@ class Student(User):
 class Faculty(User):
     designation = models.CharField(max_length=25, choices=DESIGNATION)
     department = models.CharField(max_length=2, choices=DEPARTMENT)
+    mentor = models.ForeignKey(Admin)
 
     def __str__(self):
         return str(self.name + self.designation + self.department)
+
+    def get_short_name(self):
+        return self.name
+
+    def get_full_name(self):
+        fullname = self.username+' '+self.email
+        return fullname
+
+
+class Student(User):
+    year = models.CharField(max_length=2, choices=YEAR)
+    department = models.CharField(max_length=2, choices=DEPARTMENT)
+    roll_no = models.CharField(max_length=12, blank=False)
+    mentor = models.ForeignKey(Faculty)
+
+    def __str__(self):
+        return str(self.name + self.year + self.department)
 
     def get_short_name(self):
         return self.name
@@ -131,27 +146,46 @@ class Message(models.Model):
 
 class Object(models.Model):
     name = models.CharField(max_length=100, blank=False)
-    cost = models.FloatField()
+    cost = models.FloatField(default=50.00)
     dueDate = models.DateField()
     currentOwner = models.ForeignKey(User)
     type = models.CharField(max_length=30, choices=OBJECT_TYPE)
+    quantity = models.IntegerField()
 
     def __str__(self):
         return self.currentOwner.__str__() + ' ' + str(self.cost)
 
     @staticmethod
     def object_verbose():
-        for i in range
-        return dict(OBJECT_TYPE)
+        # for items in OBJECT_TYPE:
+        #     print(items[0])
+        #     int(i[0]) for i in OBJECT_TYPE
+        unzip = zip(*OBJECT_TYPE)
+        # print(list(unzip))
+        return list(unzip[0])
 
 
 class Request(models.Model):
     r_username = models.ForeignKey(User, related_name='r_username')
-    r_object = models.ForeignKey(Object)
+    r_object = models.CharField(max_length=15, choices=OBJECT_TYPE)
     status = models.CharField(max_length=15, choices=STATUS)
     number = models.IntegerField(primary_key=True)
-    date_of_request = models.DateField
+    date_of_request = models.DateField()
     requested_to = models.ForeignKey(User, related_name='requested_to')
-    date_of_completion = models.DateField
+    date_of_completion = models.DateField()
 
+    def __str__(self):
+        string = str(self.r_username.name)+' '+str(self.number)+' '+self.r_object+' '+self.status
+        return string
+
+
+class NotificationFaculty(models.Model):
+    title = models.CharField(max_length=100)
+    receiver = models.ForeignKey(User)
+    request = models.ForeignKey(Request)
+    status = models.BooleanField(default=False)  # False = Unread
+
+    def __str__(self):
+        string = self.receiver.name + str(self.request) + str(self.status)
+        return string
 

@@ -1,40 +1,24 @@
 {% include "users/base.html" %}
 
 <body>
-    <!--<div class="navbar navbar-default navbar-fixed-top">-->
-        <!--<div class="container">-->
-            <!--<div class="navbar-header">-->
-                <!--<a href="/home" class="navbar-brand">projectYasha</a>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <a href="/home" class="navbar-brand">projectYasha</a>
-            <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">-->
-                <!--<span class="icon-bar"></span>-->
-                <!--<span class="icon-bar"></span>-->
-                <!--<span class="icon-bar"></span>-->
-            <!--</button>-->
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <!--<li><a href="#">Inicio</a></li>-->
-                <!--<li class="active"><a href="http://bootsnipp.com/snippets/featured/nav-account-manager" target="_blank">Inspirado en este ejemplo</a></li>-->
                  <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Notification
                     <span class="badge"> {{ nn }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         {% for notif in notifs %}
-                        <li><a href="#" id="{{ notif.id }} ">{{ notif.title }}</a></li>
+                        <li><a href="#" id="{{ notif.id }} ">Assign {{ notif.request.number }}
+                            {{ notif.request.r_object }} to {{ notif.request.r_username.name }}  </a></li>
                         <div align="center">
                             <button class="btn btn-primary" type="button"
-                                    id="app{{ notif.id }}" onclick="app{{ notif.id }}()">Approve</button>
-                            <button class="btn btn-default" type="button"
-                                    id="rej{{ notif.id }}" onclick="rej{{ notif.id }}()"> Reject </button>
+                                   id="app{{ notif.id }}" onclick="app{{ notif.id }}()">Assign</button>
                         </div>
                         {% endfor %}
 
@@ -88,8 +72,7 @@
         <div class="row-fluid">
             <div class="col-md-2">
 				<ul class="nav nav-pills nav-stacked">
-				  <li><a href="#">Object Details</a></li>
-				  <li><a href="/login/req">Request Resource</a></li>
+				  <li><a href=#>Purchase Request</a></li>
 				  <li><a href="/login/logout">Logout</a></li>
 				</ul>
 			</div>
@@ -164,7 +147,7 @@ function getCookie(name) {
 {% for notif in notifs %}
 function app{{notif.id}}() {
     var csrftoken = getCookie("csrftoken");
-    $.post("/login/approve",
+    $.post("/login/ass_obj",
         {
             csrfmiddlewaretoken: csrftoken,
             req: "app",
