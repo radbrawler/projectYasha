@@ -17,11 +17,10 @@ This app is course project of CS223-Software Engineering Course.
 
 #### Using the app ####
 
-Clone the repo and in the root run
+Clone the repo and in the root and run
 
 `python manage.py runserver`
 
 If the python environment is not setup, please set it up first.
 
-'pip install -r requirements.txt'
-
+`pip install -r requirements.txt`
