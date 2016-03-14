@@ -153,7 +153,8 @@ class Object(models.Model):
     quantity = models.IntegerField()
 
     def __str__(self):
-        return self.currentOwner.__str__() + ' ' + str(self.cost)
+        return self.type+str(self.id)+self.currentOwner.name \
+               + ' ' + str(self.cost) + str(self.quantity)
 
     @staticmethod
     def object_verbose():
@@ -189,3 +190,7 @@ class NotificationFaculty(models.Model):
         string = self.receiver.name + str(self.request) + str(self.status)
         return string
 
+
+class PurchaseRequest(models.Model):
+
+    pass

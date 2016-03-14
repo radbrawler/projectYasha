@@ -1,11 +1,18 @@
 {% include "users/base.html" %}
 
 <body>
-    <div class="navbar navbar-default navbar-fixed-top">
+    <div style="z-index: -1">
+    <a href="https://github.com/radbrawler">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="/static/images/fork.png"
+                                          alt="Fork me on GitHub" data-canonical-src="/static/images/fork.png"></a>
+    </div>
+
+    <div class="navbar navbar-default navbar-fixed-top" style="z-index: -3">
         <div class="container">
             <div class="navbar-header">
-                <a href="#" class="navbar-brand">projectYasha</a>
-            </div>
+            <a href="/home" class="navbar-brand"><b>projectYasha</b></a>
+            <img class="navbar-brand" src="/static/images/logo1.gif">
+        </div>
         </div>
     </div>
     <br><br><br><br>
@@ -13,8 +20,8 @@
         <div class="row-fluid">
             <div class="col-md-4"></div>
             <div class="col-md-4">
-                <h4>Login</h4>
-                Login here to continue
+                <h3 class="text-center">Login</h3>
+                <p class="text-center"> Stores and Purchase Department </p>
                 <hr>
                 <span id="errors" style="background-color:#a00;"></span>
                 <br><br>
@@ -63,6 +70,7 @@
             <!--</div>-->
         </div>
     </div>
+    {% include "users/footer.html" %}
 </body>
 
 

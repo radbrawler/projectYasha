@@ -41,7 +41,6 @@ class Socket:
 def user_login(request):
     try:
         if request.session['username']:
-            print('before this')
             return HttpResponseRedirect('/login/index')
     except KeyError:
         context = RequestContext(request)
@@ -191,7 +190,7 @@ def approve(request):
     notif.save()
     msg = 'saved notif'
     print(notif.request.status)
-    return HttpResponseRedirect('/login/index')
+    return HttpResponse(json.dumps({'msg': msg}), content_type='application/json')
 
 
 @login_required
@@ -203,23 +202,73 @@ def admin(request):
     # for i in n:
     #     if i.status is False:
     #         nn += 1
+    usr = Student.objects.all().order_by('roll_no')
+    fac = Faculty.objects.all()
+    obj = Object.objects.all()
+    # for t in OBJECT_TYPE:
+    #     o = Object.objects.filter(type=t[0])
+    #     if o.count():
+    #         o[0].quantity = o.count()
+    #         print(o[0].quantity, o.count())
+    #         obj.append(o[0])
 
-    return render(request, 'users/admin.html', {'notifs': n, 'nn': nn})
+    print(obj)
+    return render(request, 'users/admin.html', {'notifs': n, 'nn': nn, 'usr': usr, 'obj': obj})
+
 
 @login_required
-def ass_obj(request):
+def ass_obj(request):  # called by admin
     r = request.POST['req']
     id = request.POST['id']
 
     notif = NotificationFaculty.objects.get(id=id)
     req = notif.request
-    req.status = 'C'
-    req.date_of_completion = timezone.now()
-    req.save()
-    obj = Object(name=str(req.r_object) + str(timezone.now()), dueDate=timezone.now() + timedelta(days=200),
-                 currentOwner=req.r_username, type=req.r_object, quantity=req.number)
-
-    obj.save()
-    msg = 'saved object'
+    obj = Object.objects.filter(type=req.r_object)
     print(obj)
-    return HttpResponseRedirect('/login/index')
+
+    if obj.count() >= req.number:
+        req.status = 'C'
+        req.date_of_completion = timezone.now()
+        req.save()
+        for i in range(obj.count()):
+            o = obj[i]
+            o.currentOwner = req.r_username
+            o.save()
+        msg = 'Objects Assigned to ' + str(req.r_username.name)
+        print(obj)
+        return HttpResponse(json.dumps({'msg': msg}), content_type='application/json')
+
+    else:
+        msg = 'Inventory doesn\'t have enough resources. Please purchase resources.'
+        return HttpResponse(json.dumps({'errors': msg}), content_type='application/json')
+
+
+@login_required
+def obj_form(request):
+    obj = Object.object_verbose()
+    user = User.objects.get(username=request.session['username'])
+    return render(request, 'users/create_object.html', {'obj': obj, 'user': user})
+
+
+@login_required
+def create_obj(request):
+    try:
+        num = int(request.POST['quantity'])
+        print(int(num))
+        user = User.objects.get(username=request.session['username'])
+
+        for i in range(num):
+            obj = Object(name=request.POST['type'] + str(timezone.now()),
+                         dueDate=timezone.now() + timedelta(days=int(request.POST['dueDate'])),
+                         currentOwner=user, type=request.POST['type'], cost=float(request.POST['cost']),
+                         quantity=1)
+            obj.save()
+
+        msg = 'Objects Created Successfully'
+        print(msg)
+        return HttpResponse(json.dumps({'msg': msg}), content_type='application/json')
+    except ObjectDoesNotExist:
+        msg = 'Could Not create Objects'
+        print(msg)
+        return HttpResponse(json.dumps({'errors': msg}), content_type='application/json')
+

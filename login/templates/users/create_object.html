@@ -1,0 +1,127 @@
+{% include "users/base.html" %}
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/home" class="navbar-brand"><b>projectYasha</b></a>
+            <img class="navbar-brand" src="/static/images/logo1.gif">
+        </div>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-user"></span>
+                    <strong>{{user.name}}</strong>
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <div class="navbar-login">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <p class="text-center">
+                                        <span class="glyphicon glyphicon-user icon-size"></span>
+                                    </p>
+                                </div>
+                                <div class="col-lg-8">
+                                    <p class="text-left">Signed in as <strong>{{user.username}}</strong></p>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <p class="text-left">{{ user.email }}</p>
+                                <p class="text-right">
+                                    <a href="/login/logout" class="btn btn-primary btn-block btn-sm">Logout</a>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    </nav>
+    <br><br><br>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <p class="text-center"> Fill out new Object Details </p>
+                <hr>
+                <span id="errors" style="background-color:#a00;"></span>
+                <br>
+                <form role="form" id="obj_form" action="javascript:create_obj()">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <select class="form-control" id="type" name="type">
+                            {% for i in obj %}
+                            <option>{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cost">Cost</label>
+                        <input required type="text" class="form-control" id="cost"
+                               placeholder="Rs." name="cost">
+                    </div>
+                    <div class="form-group">
+                        <label for="dueDate">Due Date to Expire</label>
+                        <input required type="text" class="form-control" id="dueDate"
+                               placeholder="Days" name="dueDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input required type="text" class="form-control" id="quantity"
+                               placeholder="No." name="quantity">
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Submit">
+                </form>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    {% include "users/footer.html" %}
+
+</body>
+
+<script type="text/javascript">
+    function sleep(miliseconds) {
+        var currentTime = new Date().getTime();
+        while (currentTime + miliseconds >= new Date().getTime()) {
+        }
+    }
+    function create_obj(){
+        var done = false;
+        var cost = document.getElementById("cost").value;
+        var quantity = document.getElementById("quantity").value;
+        var dueDate = document.getElementById("dueDate").value;
+
+        if(cost && quantity && dueDate)
+        {   done = true; }
+
+        var obj_form = $("#obj_form").serialize();
+        $.ajax({
+            type:"POST",
+            url:"/login/create_obj",
+            dataType:"json",
+            data: obj_form,
+            success: function(data) {
+                if(data.errors)
+                {   alert(data.errors);
+                    console.log("Error in generating objects");
+                    console.log(data.errors);
+                }
+                if(data.msg)
+                {   alert(data.msg);
+                    console.log("Objects generated");
+                    window.location.href = "/login/admin";
+                }
+            }
+        });
+
+
+    }
+</script>

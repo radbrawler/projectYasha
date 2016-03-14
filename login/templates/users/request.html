@@ -88,6 +88,12 @@
 </body>
 
 <script type="text/javascript">
+    function sleep(miliseconds) {
+        var currentTime = new Date().getTime();
+        while (currentTime + miliseconds >= new Date().getTime()) {
+        }
+    }
+
     function request(){
         var object =  document.getElementById("object").value;
         console.log(object);
