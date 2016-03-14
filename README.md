@@ -10,8 +10,18 @@ This app is course project of CS223-Software Engineering Course.
 
 ### Contributors ###
 
-* [Anmol](https://bitbucket.org/radbrawler)
-* [Narendar Kumar]
-* [Indraneel Pise]
-* [Parag Dale]
+* [Anmol](https://bitbucket.org/radbrawler/)
+* [Narendar Kumar](https://www.facebook.com/khola07)
+* [Indraneel Pise](https://www.facebook.com/indraneel.pise)
+* [Parag Dale](https://bitbucket.org/hectrix08/)
+
+#### Using the app ####
+
+Clone the repo and in the root run
+
+`python manage.py runserver`
+
+If the python environment is not setup, please set it up first.
+
+'pip install -r requirements.txt'
 
