@@ -10,7 +10,7 @@ This app is course project of CS223-Software Engineering Course.
 
 ### Contributors ###
 
-* [Anmol]
+* [Anmol](https://bitbucket.org/radbrawler)
 * [Narendar Kumar]
 * [Indraneel Pise]
 * [Parag Dale]
