@@ -1,6 +1,7 @@
 # README #
 
 This app is course project of CS223-Software Engineering Course.
+* * *
 
 ### Summary ###
 
@@ -15,6 +16,7 @@ This app is course project of CS223-Software Engineering Course.
 * [Indraneel Pise](https://www.facebook.com/indraneel.pise)
 * [Parag Dale](https://bitbucket.org/hectrix08/)
 
+***
 #### Using the app ####
 
 Clone the repo and in the root and run
