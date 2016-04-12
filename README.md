@@ -26,3 +26,8 @@ Clone the repo and in the root and run
 Install pip and run,
 
 `pip install -r requirements.txt`
+
+Requirements
+
+* Python2.7
+* django1.9.2

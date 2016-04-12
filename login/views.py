@@ -168,27 +168,29 @@ def dummy(request):
     return render(request, 'users/index.html', {'msg': msg})
 
 
+# Faculty Approval
 @login_required()
 def approve(request):
     r = request.POST['req']
     id = request.POST['id']
 
     notif = NotificationFaculty.objects.get(id=id)
-    print(type(r), type('app'))
+    print(notif)
     print(r)
     if str(r) == 'app':
         print("in if")
         notif.status = True
         notif.request.status = 'A'
         notif.request.save()
+        msg = 'Request has been Approved'
 
     elif str(r) == 'rej':
         print("in else")
         notif.status = True
         notif.request.status = 'D'
         notif.request.save()
+        msg = 'Request has been Rejected'
     notif.save()
-    msg = 'saved notif'
     print(notif.request.status)
     return HttpResponse(json.dumps({'msg': msg}), content_type='application/json')
 
@@ -197,7 +199,10 @@ def approve(request):
 def admin(request):
     user = request.session['username']
     r = Request.objects.filter(status='A')
-    n = NotificationFaculty.objects.filter(request=r)
+    print(r)
+    n = list()
+    for i in range(r.count()):
+        n.append(NotificationFaculty.objects.filter(request=r[i]))
     nn = len(n)
     # for i in n:
     #     if i.status is False:
@@ -212,8 +217,9 @@ def admin(request):
     #         print(o[0].quantity, o.count())
     #         obj.append(o[0])
 
-    print(obj)
-    return render(request, 'users/admin.html', {'notifs': n, 'nn': nn, 'usr': usr, 'obj': obj})
+    print(n)
+    # print(fac)
+    return render(request, 'users/admin.html', {'notifs': n, 'nn': nn, 'usr': usr, 'obj': obj, 'fac':fac})
 
 
 @login_required
@@ -223,14 +229,15 @@ def ass_obj(request):  # called by admin
 
     notif = NotificationFaculty.objects.get(id=id)
     req = notif.request
-    obj = Object.objects.filter(type=req.r_object)
+    obj = Object.objects.filter(type=req.r_object, currentOwner=request.session['username'])
     print(obj)
 
     if obj.count() >= req.number:
         req.status = 'C'
         req.date_of_completion = timezone.now()
         req.save()
-        for i in range(obj.count()):
+        for i in range(req.number):
+            print(i)
             o = obj[i]
             o.currentOwner = req.r_username
             o.save()
