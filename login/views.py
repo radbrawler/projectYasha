@@ -79,6 +79,7 @@ def index(request):
     if request.session['username']:
         # print(request.session['username'])
         obj = Object.objects.filter(currentOwner=request.session['username'])
+        reqs = Request.objects.filter(r_username=request.session['username'])
         try:
             user = Student.objects.get(username=request.session['username'])
             u_type = 'student'
@@ -101,10 +102,11 @@ def index(request):
                 if i.status is False:
                     nn += 1
 
-            return render(request, 'users/index.html', {'obj': obj, 'user': user, 'nn': nn, 'notifs': n})
+            return render(request, 'users/index.html',
+                          {'obj': obj, 'user': user, 'nn': nn, 'notifs': n, 'req': reqs})
 
         else:
-            return render(request, 'users/index.html', {'obj': obj, 'user': user, 'nn': nn})
+            return render(request, 'users/index.html', {'obj': obj, 'user': user, 'nn': nn, 'req': reqs})
 
     else:
         # print('before home')
@@ -200,8 +202,9 @@ def admin(request):
     user = request.session['username']
     r = Request.objects.filter(status='A')
     print(r)
-    n = list()
+    n = []
     for i in range(r.count()):
+        print(i)
         n.append(NotificationFaculty.objects.filter(request=r[i]))
     nn = len(n)
     # for i in n:
@@ -217,9 +220,9 @@ def admin(request):
     #         print(o[0].quantity, o.count())
     #         obj.append(o[0])
 
-    print(n)
+    print(n, nn)
     # print(fac)
-    return render(request, 'users/admin.html', {'notifs': n, 'nn': nn, 'usr': usr, 'obj': obj, 'fac':fac})
+    return render(request, 'users/admin.html', {'notifs': n, 'nn': nn, 'usr': usr, 'obj': obj, 'fac': fac})
 
 
 @login_required
@@ -237,7 +240,7 @@ def ass_obj(request):  # called by admin
         req.date_of_completion = timezone.now()
         req.save()
         for i in range(req.number):
-            print(i)
+            # print(i)
             o = obj[i]
             o.currentOwner = req.r_username
             o.save()
